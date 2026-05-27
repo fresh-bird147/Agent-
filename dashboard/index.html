@@ -12,8 +12,22 @@
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1419; color: #e7e9ea; min-height: 100vh; }
 .header { background: #1a1f2e; border-bottom: 1px solid #2d3748; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
 .header h1 { font-size: 20px; font-weight: 600; background: linear-gradient(135deg, #63b3ed, #b794f4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.header-actions { display: flex; gap: 8px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
 .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.input-panel { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+.input-panel .row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+.input-panel .field { display: flex; flex-direction: column; gap: 4px; }
+.input-panel .field label { font-size: 12px; color: #8899a6; }
+.input-panel .field input, .input-panel .field textarea { background: #0d1117; border: 1px solid #2d3748; border-radius: 6px; padding: 8px 12px; color: #e7e9ea; font-size: 14px; width: 320px; }
+.input-panel .field textarea { width: 500px; height: 60px; resize: vertical; }
+.input-panel .btn-execute { padding: 9px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; }
+.btn-execute.start { background: linear-gradient(135deg, #4299e1, #3182ce); color: #fff; }
+.btn-execute.start:hover { background: linear-gradient(135deg, #3182ce, #2b6cb0); }
+.btn-execute.running { background: #f6ad55; color: #1a202c; cursor: not-allowed; }
+.btn-execute.done { background: #68d391; color: #1a202c; }
+.task-info { background: #0d1117; border: 1px solid #2d3748; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+.task-info .current-phase { font-size: 13px; color: #63b3ed; }
+.task-info .elapsed { font-size: 13px; color: #8899a6; }
 .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
 .stat-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 16px; }
 .stat-card .label { font-size: 12px; color: #8899a6; margin-bottom: 4px; }
@@ -25,15 +39,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .tab-btn { padding: 8px 20px; border: 1px solid #2d3748; border-radius: 6px; background: #1a1f2e; color: #8899a6; cursor: pointer; font-size: 14px; transition: all .2s; }
 .tab-btn:hover { border-color: #4299e1; color: #e7e9ea; }
 .tab-btn.active { background: #2d3748; border-color: #4299e1; color: #63b3ed; }
-.phase-section { margin-bottom: 24px; }
+.phase-section { margin-bottom: 24px; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 .phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 8px 12px; background: #1a1f2e; border-radius: 6px; border-left: 3px solid; }
 .phase-header.pending { border-color: #4a5568; }
-.phase-header.running { border-color: #f6ad55; }
+.phase-header.running { border-color: #f6ad55; animation: pulseBorder 1.5s infinite; }
 .phase-header.done { border-color: #68d391; }
+.phase-header.failed { border-color: #fc8181; }
+@keyframes pulseBorder { 0%,100% { border-color: #f6ad55; } 50% { border-color: #ed8936; } }
 .phase-header h3 { font-size: 15px; font-weight: 500; }
 .phase-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
 .phase-badge.parallel { background: #2d3748; color: #63b3ed; }
 .phase-badge.serial { background: #2d3748; color: #b794f4; }
+.phase-status-text { margin-left: auto; font-size: 12px; font-weight: 500; }
 .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
 .agent-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
 .agent-card:hover { border-color: #4299e1; transform: translateY(-1px); }
@@ -55,12 +73,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .progress-bar .fill.failed { background: #fc8181; }
 .detail-panel { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 20px; margin-top: 20px; }
 .detail-panel h3 { font-size: 16px; margin-bottom: 12px; color: #63b3ed; }
-.log-viewer { background: #0d1117; border: 1px solid #2d3748; border-radius: 6px; padding: 12px; max-height: 200px; overflow-y: auto; font-family: 'Cascadia Code', monospace; font-size: 12px; }
+.log-viewer { background: #0d1117; border: 1px solid #2d3748; border-radius: 6px; padding: 12px; max-height: 300px; overflow-y: auto; font-family: 'Cascadia Code', monospace; font-size: 12px; }
 .log-viewer .log-line { padding: 2px 0; color: #8899a6; }
+.log-viewer .log-line.info { color: #63b3ed; }
+.log-viewer .log-line.success { color: #68d391; }
+.log-viewer .log-line.warn { color: #f6ad55; }
+.log-viewer .log-line.error { color: #fc8181; }
 @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .6; } }
 .empty-state { text-align: center; padding: 60px 20px; color: #4a5568; }
 .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.execution-log { margin-top: 16px; }
+.execution-log h4 { font-size: 13px; color: #8899a6; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -68,25 +92,52 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="header">
     <h1>Agent Pipeline Dashboard</h1>
     <div class="header-actions">
-      <el-button size="small" :type="simulating ? 'warning' : 'primary'" @click="toggleSimulate" :loading="simulating">
-        {{ simulating ? '模拟中...' : '模拟运行' }}
-      </el-button>
-      <el-button size="small" @click="resetState">重置</el-button>
       <el-select v-model="selectedWorkflow" size="small" style="width:180px;" placeholder="选择工作流" @change="onWorkflowChange">
         <el-option label="仓库技术尽调" value="repo-due-diligence"></el-option>
         <el-option label="全栈开发流水线" value="dev-workflow"></el-option>
         <el-option label="万能搜索引擎" value="universal-search"></el-option>
       </el-select>
+      <el-button size="small" @click="resetState" :disabled="executing">重置</el-button>
     </div>
   </div>
 
   <div class="container">
+    <!-- Input Panel -->
+    <div class="input-panel" v-if="pipeline">
+      <div class="row">
+        <div class="field" v-if="selectedWorkflow === 'universal-search'">
+          <label>查询关键词</label>
+          <input type="text" v-model="taskInput" placeholder="输入查询关键词，如：快手Java面试题" @keyup.enter="executeWorkflow">
+        </div>
+        <div class="field" v-if="selectedWorkflow === 'repo-due-diligence'">
+          <label>GitHub 仓库地址</label>
+          <input type="text" v-model="taskInput" placeholder="输入仓库URL，如：https://github.com/facebook/react" @keyup.enter="executeWorkflow">
+        </div>
+        <div class="field" v-if="selectedWorkflow === 'dev-workflow'">
+          <label>需求描述</label>
+          <textarea v-model="taskInput" placeholder="输入需求描述，如：开发一个用户管理系统，包含注册登录、权限管理..."></textarea>
+        </div>
+        <el-button size="small" class="btn-execute" @click="executeWorkflow" :disabled="executing || !taskInput" :class="executing ? 'running' : (lastResult ? 'done' : 'start')">
+          {{ executing ? '执行中...' : (lastResult ? '重新执行' : '开始执行') }}
+        </el-button>
+        <span v-if="executing" style="color:#f6ad55;font-size:13px;">任务执行中，请观察下方面板...</span>
+        <span v-if="lastResult && !executing" style="color:#68d391;font-size:13px;">上一次执行完成 ({{ lastResult }})</span>
+      </div>
+    </div>
+
+    <!-- Task Info -->
+    <div class="task-info" v-if="taskQuery">
+      <div class="current-phase">
+        <span v-if="currentPhase">当前阶段：<strong>{{ currentPhase }}</strong></span>
+        <span v-else>准备执行：<strong>{{ taskQuery }}</strong></span>
+      </div>
+      <div class="elapsed">
+        任务ID: {{ taskId || '-' }} | {{ elapsed }}
+      </div>
+    </div>
+
     <!-- Stats -->
     <div class="stats-bar">
-      <div class="stat-card">
-        <div class="label">当前工作流</div>
-        <div class="value" style="font-size:16px;">{{ pipeline?.name || '未选择' }}</div>
-      </div>
       <div class="stat-card">
         <div class="label">总 Agents</div>
         <div class="value">{{ totalAgents }}</div>
@@ -99,6 +150,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
         <div class="label">运行中</div>
         <div class="value running">{{ runningAgents }}</div>
       </div>
+      <div class="stat-card">
+        <div class="label">等待中</div>
+        <div class="value" style="color:#4a5568;">{{ pendingAgents }}</div>
+      </div>
     </div>
 
     <!-- Pipeline visualization -->
@@ -108,11 +163,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
           <h3>{{ phase.name }}</h3>
           <span v-if="phase.parallel" class="phase-badge parallel">并行</span>
           <span v-else class="phase-badge serial">串行</span>
+          <span class="phase-status-text">{{ phaseStatusText(phase.id) }}</span>
         </div>
         <div class="agents-grid">
           <div v-for="agent in phase.agents" :key="agent.id"
                class="agent-card"
-               :class="[agentState(agent.id).status, { selected: selectedAgent?.id === agent.id }]"
+               :class="[agt(agent.id).status, { selected: selectedAgent?.id === agent.id }]"
                @click="selectAgent(agent)">
             <div class="name">{{ agent.name }}</div>
             <div class="label">{{ agent.label }}</div>
@@ -122,8 +178,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <span>{{ agent.model }}</span>
             </div>
             <div class="progress-bar">
-              <div class="fill" :class="agentState(agent.id).status"
-                   :style="{ width: agentState(agent.id).progress + '%' }"></div>
+              <div class="fill" :class="agt(agent.id).status"
+                   :style="{ width: agt(agent.id).progress + '%' }"></div>
             </div>
           </div>
         </div>
@@ -144,33 +200,50 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
           <el-descriptions-item label="完成">{{ agt(selectedAgent.id).finished_at || '-' }}</el-descriptions-item>
           <el-descriptions-item label="产出">{{ selectedAgent.output }}</el-descriptions-item>
         </el-descriptions>
+        <h4 style="color:#8899a6;font-size:13px;margin-bottom:6px;">执行日志</h4>
         <div class="log-viewer" v-if="agt(selectedAgent.id).log?.length">
-          <div v-for="(line, i) in agt(selectedAgent.id).log" :key="i" class="log-line">{{ line }}</div>
+          <div v-for="(line, i) in agt(selectedAgent.id).log" :key="i" class="log-line" :class="logClass(line)">{{ line }}</div>
         </div>
         <div v-else style="color:#4a5568; font-size:13px; padding:8px;">暂无日志</div>
+      </div>
+
+      <!-- Execution Log (global) -->
+      <div class="detail-panel execution-log" v-if="executionLog.length > 0">
+        <h4>全局执行日志</h4>
+        <div class="log-viewer">
+          <div v-for="(line, i) in executionLog" :key="i" class="log-line" :class="logClass(line)">{{ line }}</div>
+        </div>
       </div>
     </div>
 
     <!-- Empty state -->
     <div class="empty-state" v-else>
       <div class="icon">&#9881;</div>
-      <p>请选择一个工作流开始监控</p>
-      <p style="font-size:12px;color:#4a5568;margin-top:8px;">点击"模拟运行"查看完整流水线</p>
+      <p>请选择一个工作流，输入查询内容后点击「开始执行」</p>
     </div>
   </div>
 </div>
 
 <script>
-const { createApp, ref, computed, onMounted, onUnmounted, watch } = Vue;
+const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
 
 createApp({
   data() {
     return {
       selectedWorkflow: '',
+      taskInput: '',
+      taskQuery: '',
+      taskId: '',
       pipeline: null,
       state: null,
       selectedAgent: null,
-      simulating: false,
+      executing: false,
+      lastResult: '',
+      startTime: 0,
+      elapsedTimer: null,
+      currentPhase: '',
+      executionLog: [],
+      elapsed: '',
       eventSource: null,
       polling: null
     }
@@ -191,17 +264,23 @@ createApp({
       if (!this.state || !this.selectedWorkflow) return 0;
       const agents = this.state[this.selectedWorkflow]?.agents || {};
       return Object.values(agents).filter(a => a.status === 'running').length;
+    },
+    pendingAgents() {
+      if (!this.state || !this.selectedWorkflow) return 0;
+      const agents = this.state[this.selectedWorkflow]?.agents || {};
+      return Object.values(agents).filter(a => a.status === 'pending').length;
     }
   },
   methods: {
     agt(id) {
       return this.state?.[this.selectedWorkflow]?.agents?.[id] || { status: 'pending', progress: 0, log: [] };
     },
-    agentState(id) {
-      return this.agt(id);
-    },
     phaseStatus(phaseId) {
       return this.state?.[this.selectedWorkflow]?.phases?.[phaseId]?.status || 'pending';
+    },
+    phaseStatusText(phaseId) {
+      const map = { running: '执行中', done: '已完成', failed: '失败', pending: '等待中' };
+      return map[this.phaseStatus(phaseId)] || '';
     },
     tagType(status) {
       const map = { running: 'warning', done: 'success', failed: 'danger', pending: 'info' };
@@ -211,13 +290,22 @@ createApp({
       const map = { running: '运行中', done: '已完成', failed: '失败', pending: '等待中' };
       return map[status] || status;
     },
+    logClass(line) {
+      if (typeof line !== 'string') return '';
+      if (line.includes('失败') || line.includes('error')) return 'error';
+      if (line.includes('完成') || line.includes('成功')) return 'success';
+      if (line.includes('开始') || line.includes('启动')) return 'info';
+      if (line.includes('警告') || line.includes('⚠')) return 'warn';
+      return '';
+    },
     selectAgent(agent) {
       this.selectedAgent = this.selectedAgent?.id === agent.id ? null : agent;
     },
     async fetchPipeline() {
       try {
         const r = await fetch('/api/pipeline');
-        this.pipeline = (await r.json()).workflows[this.selectedWorkflow] || null;
+        const data = await r.json();
+        this.pipeline = data.workflows[this.selectedWorkflow] || null;
       } catch (e) { console.error(e); }
     },
     async fetchState() {
@@ -230,49 +318,118 @@ createApp({
       await this.fetchPipeline();
       await this.fetchState();
       this.selectedAgent = null;
+      this.taskInput = '';
+      this.taskQuery = '';
+      this.executionLog = [];
+      this.currentPhase = '';
     },
-    async toggleSimulate() {
-      if (this.simulating) return;
-      this.simulating = true;
-      await fetch('/api/simulate', { method: 'POST' });
-      this.simulating = false;
+    async executeWorkflow() {
+      if (this.executing || !this.taskInput || !this.selectedWorkflow) return;
+      this.executing = true;
+      this.lastResult = '';
+      this.executionLog = [];
+      this.taskQuery = this.taskInput;
+      this.taskId = 'task-' + Date.now().toString(36);
+      this.startTime = Date.now();
+      this.currentPhase = '';
+
+      if (this.elapsedTimer) clearInterval(this.elapsedTimer);
+      this.elapsedTimer = setInterval(() => {
+        const s = Math.floor((Date.now() - this.startTime) / 1000);
+        this.elapsed = `${Math.floor(s/60)}分${s%60}秒`;
+      }, 1000);
+
+      try {
+        const r = await fetch('/api/workflow/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workflow: this.selectedWorkflow, input: this.taskInput })
+        });
+        const data = await r.json();
+        if (data.ok) {
+          this.executionLog.push(`[${new Date().toLocaleTimeString()}] 工作流已提交，等待执行完成...`);
+        }
+      } catch (e) {
+        this.executing = false;
+        this.executionLog.push(`[${new Date().toLocaleTimeString()}] ERROR: 请求失败 - ${e.message}`);
+      }
     },
     async resetState() {
+      if (this.executing) return;
       await fetch('/api/reset');
       await this.fetchState();
       this.selectedAgent = null;
+      this.taskInput = '';
+      this.taskQuery = '';
+      this.taskId = '';
+      this.executing = false;
+      this.lastResult = '';
+      this.executionLog = [];
+      this.currentPhase = '';
+      this.elapsed = '';
+      this.startTime = 0;
+      if (this.elapsedTimer) { clearInterval(this.elapsedTimer); this.elapsedTimer = null; }
     },
     connectSSE() {
+      if (this.eventSource) this.eventSource.close();
       this.eventSource = new EventSource('/api/events');
       this.eventSource.onmessage = (e) => {
-        const msg = JSON.parse(e.data);
-        if (msg.type === 'state_update' || msg.type === 'simulation_complete') {
-          this.state = msg.data;
-          if (msg.type === 'simulation_complete') this.simulating = false;
-        }
-        if (msg.type === 'workflow_started') {
-          this.state = msg.data;
-          this.simulating = true;
-        }
-        if (msg.type === 'reset') {
-          this.state = msg.data;
-          this.selectedAgent = null;
-        }
+        try {
+          const msg = JSON.parse(e.data);
+          if (msg.type === 'state_update') {
+            this.state = msg.data;
+          }
+          if (msg.type === 'execution_log') {
+            this.executionLog.push(msg.msg);
+            if (this.executionLog.length > 200) this.executionLog.shift();
+          }
+          if (msg.type === 'phase_change') {
+            this.currentPhase = msg.phase;
+          }
+          if (msg.type === 'execution_start') {
+            this.taskQuery = msg.input;
+            this.taskId = msg.task_id;
+            this.startTime = Date.now();
+            this.currentPhase = '';
+            this.executionLog.push(msg.msg);
+            if (this.elapsedTimer) clearInterval(this.elapsedTimer);
+            this.elapsedTimer = setInterval(() => {
+              const s = Math.floor((Date.now() - this.startTime) / 1000);
+              this.elapsed = `${Math.floor(s/60)}分${s%60}秒`;
+            }, 1000);
+          }
+          if (msg.type === 'execution_complete') {
+            this.executing = false;
+            this.lastResult = msg.time;
+            this.currentPhase = '';
+            this.executionLog.push(msg.msg);
+            if (this.elapsedTimer) { clearInterval(this.elapsedTimer); this.elapsedTimer = null; }
+          }
+          if (msg.type === 'reset') {
+            this.state = msg.data;
+            this.selectedAgent = null;
+            this.executing = false;
+            this.lastResult = '';
+            this.executionLog = [];
+            this.currentPhase = '';
+          }
+        } catch (ex) {}
       };
       this.eventSource.onerror = () => {
-        console.log('SSE 断连，5秒后重试...');
-        setTimeout(() => this.connectSSE(), 5000);
+        console.log('SSE 断连，3秒后重试...');
+        setTimeout(() => this.connectSSE(), 3000);
       };
     }
   },
   async mounted() {
     await this.fetchState();
     this.connectSSE();
-    this.polling = setInterval(() => this.fetchState(), 3000);
+    this.polling = setInterval(() => this.fetchState(), 2000);
   },
   beforeUnmount() {
     if (this.eventSource) this.eventSource.close();
     if (this.polling) clearInterval(this.polling);
+    if (this.elapsedTimer) clearInterval(this.elapsedTimer);
   }
 }).use(ElementPlus).mount('#app');
 </script>
