@@ -17,11 +17,12 @@ import os
 import sys
 import uuid
 import random
+import re
 import subprocess
 from datetime import datetime
+from pathlib import Path
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from socketserver import ThreadingMixIn
-from pathlib import Path
 from typing import List, Dict, Any
 
 DASHBOARD_DIR = Path(__file__).parent.resolve()
@@ -508,6 +509,57 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 return []
 
         return ["处理中..."]
+
+    # ═══ Real scoring helpers ═══
+
+    SOURCE_AUTHORITY = {
+        "github.com": 9, "wikipedia.org": 9, "nowcoder.com": 8,
+        "docs.python.org": 10, "developer.mozilla.org": 10,
+        "zhihu.com": 6, "csdn.net": 5, "cnblogs.com": 6, "baidu.com": 5,
+        "juejin.cn": 7, "segmentfault.com": 7, "leetcode.cn": 7,
+        "51cto.com": 5, "docin.com": 5, "renrendoc.com": 4,
+    }
+
+    def _real_score(self, query: str, result: dict) -> dict:
+        keywords = self._extract_kw(query)
+        title = result.get("title", "")
+        summary = result.get("summary", "")
+        url = result.get("url", "")
+        text = f"{title} {summary}"
+
+        matched = sum(1 for kw in keywords if kw.lower() in text.lower())
+        relevance = min(10, matched * 2 + 3) if matched > 0 else max(2, 5 - len(keywords))
+
+        authority = 5
+        for domain, score in self.SOURCE_AUTHORITY.items():
+            if domain in url.lower():
+                authority = score
+                break
+        if result.get("source_type") in ("牛客网", "面试平台"): authority = max(authority, 8)
+        if result.get("source_type") == "知乎": authority = max(authority, 6)
+
+        date_str = result.get("publish_date", "unknown")
+        timeliness = 5
+        if date_str != "unknown" and len(date_str) >= 4:
+            try:
+                year = int(date_str[:4])
+                ny = datetime.now().year
+                if year >= ny: timeliness = 10
+                elif year >= ny - 1: timeliness = 8
+                elif year >= ny - 2: timeliness = 6
+                else: timeliness = 4
+            except: pass
+
+        density = min(10, len(summary) // 30 + 3)
+        weight = round((relevance * 0.4 + authority * 0.25 + timeliness * 0.15 + density * 0.2) / 10, 2)
+
+        return {"relevance": relevance, "authority": authority, "timeliness": timeliness, "density": density, "weight": weight}
+
+    @staticmethod
+    def _extract_kw(query: str) -> list:
+        sw = {"的", "是", "在", "和", "了", "有", "我", "不", "人", "都", "一", "个", "the", "a", "an", "is", "in", "of", "and", "to"}
+        words = re.findall(r'[\u4e00-\u9fff]+|[a-zA-Z]+', query)
+        return [w for w in words if w.lower() not in sw][:8]
 
     def _gen_agent_output(self, wf_name, aid, user_input, task_id):
         """Generate rich structured output for an agent."""
