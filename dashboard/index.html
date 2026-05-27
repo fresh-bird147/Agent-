@@ -403,6 +403,10 @@ createApp({
             this.lastResult = msg.time;
             this.currentPhase = '';
             this.executionLog.push(msg.msg);
+            if (msg.output_file) {
+              this.lastResult = msg.output_name || msg.time;
+              this.executionLog.push('[OUTPUT] 报告文件: ' + msg.output_file);
+            }
             if (this.elapsedTimer) { clearInterval(this.elapsedTimer); this.elapsedTimer = null; }
           }
           if (msg.type === 'reset') {
