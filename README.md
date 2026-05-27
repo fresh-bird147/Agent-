@@ -40,6 +40,24 @@
 
 **技术栈**：Java 8 + SpringBoot 2.7 + MyBatis-Plus + MySQL 8.0 + Redis + Vue 3 + Element Plus
 
+### 3. universal-search（万能搜索引擎）
+
+输入关键词 → 全网搜索 → 价值筛选 → 结构化整理 → 执行摘要：
+
+```
+5 个 Agent 串行 → 搜索 → 筛选 → 整理 → 总结 → 渲染报告
+```
+
+| 阶段 | Agent | 产出 |
+|------|-------|------|
+| 1 | Search Agent | 特征提取 + 多源搜索结果 |
+| 2 | Judgment Agent | 4维打分筛选（相关性/权威性/时效性/信息密度）|
+| 3 | Documentation Agent | 结构化 Markdown（含关键词、源地址、权重排序）|
+| 4 | Summary Agent | ≤500字执行摘要 + 趋势 + 行动建议 |
+| 5 | render_search_report.py | 最终研究报告 |
+
+**输出**：完整调研报告（执行摘要 → 调研详情 → 信息来源清单）
+
 ## 目录结构
 
 ```
@@ -53,6 +71,11 @@
 │   ├── SKILL.md                    # Orchestrator 编排脚本
 │   ├── references/                 # 6 个 Agent 系统提示 + 模板
 │   ├── scripts/                    # 3 个辅助脚本
+│   └── tests/                      # 评估用例
+├── universal-search/
+│   ├── SKILL.md                    # Orchestrator 编排脚本
+│   ├── references/                 # 4 个 Agent 系统提示 + 模板
+│   ├── scripts/                    # 渲染脚本
 │   └── tests/                      # 评估用例
 └── README.md
 ```

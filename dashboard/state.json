@@ -1,6 +1,6 @@
 {
   "active_workflow": "dev-workflow",
-  "started_at": "2026-05-27 15:18:41",
+  "started_at": "2026-05-27 21:39:42",
   "repo-due-diligence": {
     "status": "done",
     "phases": {
@@ -18,23 +18,27 @@
       "recon": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:31",
-        "finished_at": "15:18:32",
+        "started_at": "21:39:33",
+        "finished_at": "21:39:34",
         "model": "V4 Flash",
         "log": [
           "[15:18:31] 开始执行",
-          "[15:18:32] 执行完成"
+          "[15:18:32] 执行完成",
+          "[21:39:33] 开始执行",
+          "[21:39:34] 执行完成"
         ]
       },
       "code-review": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:31",
-        "finished_at": "15:18:34",
+        "started_at": "21:39:34",
+        "finished_at": "21:39:36",
         "model": "V4 Pro + 10 Flash",
         "log": [
           "[15:18:31] 开始执行",
-          "[15:18:34] 执行完成"
+          "[15:18:34] 执行完成",
+          "[21:39:34] 开始执行",
+          "[21:39:36] 执行完成"
         ],
         "children_total": 10,
         "children_done": 10
@@ -42,45 +46,53 @@
       "health-metrics": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:33",
-        "finished_at": "15:18:35",
+        "started_at": "21:39:35",
+        "finished_at": "21:39:37",
         "model": "V4 Flash",
         "log": [
           "[15:18:33] 开始执行",
-          "[15:18:35] 执行完成"
+          "[15:18:35] 执行完成",
+          "[21:39:35] 开始执行",
+          "[21:39:37] 执行完成"
         ]
       },
       "usage-guide": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:35",
-        "finished_at": "15:18:38",
+        "started_at": "21:39:37",
+        "finished_at": "21:39:39",
         "model": "V4 Flash",
         "log": [
           "[15:18:35] 开始执行",
-          "[15:18:38] 执行完成"
+          "[15:18:38] 执行完成",
+          "[21:39:37] 开始执行",
+          "[21:39:39] 执行完成"
         ]
       },
       "risk-analyst": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:37",
-        "finished_at": "15:18:39",
+        "started_at": "21:39:39",
+        "finished_at": "21:39:40",
         "model": "V4 Pro",
         "log": [
           "[15:18:37] 开始执行",
-          "[15:18:39] 执行完成"
+          "[15:18:39] 执行完成",
+          "[21:39:39] 开始执行",
+          "[21:39:40] 执行完成"
         ]
       },
       "render": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:39",
-        "finished_at": "15:18:41",
+        "started_at": "21:39:40",
+        "finished_at": "21:39:42",
         "model": "脚本",
         "log": [
           "[15:18:39] 开始执行",
-          "[15:18:41] 执行完成"
+          "[15:18:41] 执行完成",
+          "[21:39:40] 开始执行",
+          "[21:39:42] 执行完成"
         ]
       }
     }
@@ -111,34 +123,40 @@
       "requirement": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:41",
-        "finished_at": "15:18:43",
+        "started_at": "21:39:42",
+        "finished_at": "21:39:44",
         "model": "V4 Pro",
         "log": [
           "[15:18:41] 开始执行",
-          "[15:18:43] 执行完成"
+          "[15:18:43] 执行完成",
+          "[21:39:42] 开始执行",
+          "[21:39:44] 执行完成"
         ]
       },
       "architecture": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:43",
-        "finished_at": "15:18:45",
+        "started_at": "21:39:44",
+        "finished_at": "21:39:46",
         "model": "V4 Pro",
         "log": [
           "[15:18:43] 开始执行",
-          "[15:18:45] 执行完成"
+          "[15:18:45] 执行完成",
+          "[21:39:44] 开始执行",
+          "[21:39:46] 执行完成"
         ]
       },
       "coding-auth": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:44",
-        "finished_at": "15:18:46",
+        "started_at": "21:39:46",
+        "finished_at": "21:39:47",
         "model": "V4 Flash",
         "log": [
           "[15:18:44] 开始执行",
-          "[15:18:46] 执行完成"
+          "[15:18:46] 执行完成",
+          "[21:39:46] 开始执行",
+          "[21:39:47] 执行完成"
         ],
         "children_total": 3,
         "children_done": 3
@@ -146,12 +164,14 @@
       "coding-user": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:46",
-        "finished_at": "15:18:48",
+        "started_at": "21:39:47",
+        "finished_at": "21:39:50",
         "model": "V4 Flash",
         "log": [
           "[15:18:46] 开始执行",
-          "[15:18:48] 执行完成"
+          "[15:18:48] 执行完成",
+          "[21:39:47] 开始执行",
+          "[21:39:50] 执行完成"
         ],
         "children_total": 2,
         "children_done": 2
@@ -159,12 +179,14 @@
       "coding-role": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:48",
-        "finished_at": "15:18:49",
+        "started_at": "21:39:49",
+        "finished_at": "21:39:51",
         "model": "V4 Flash",
         "log": [
           "[15:18:48] 开始执行",
-          "[15:18:49] 执行完成"
+          "[15:18:49] 执行完成",
+          "[21:39:49] 开始执行",
+          "[21:39:51] 执行完成"
         ],
         "children_total": 3,
         "children_done": 3
@@ -172,12 +194,14 @@
       "coding-log": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:49",
-        "finished_at": "15:18:51",
+        "started_at": "21:39:51",
+        "finished_at": "21:39:52",
         "model": "V4 Flash",
         "log": [
           "[15:18:49] 开始执行",
-          "[15:18:51] 执行完成"
+          "[15:18:51] 执行完成",
+          "[21:39:51] 开始执行",
+          "[21:39:52] 执行完成"
         ],
         "children_total": 2,
         "children_done": 2
@@ -185,46 +209,127 @@
       "whitebox": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:50",
-        "finished_at": "15:18:52",
+        "started_at": "21:39:52",
+        "finished_at": "21:39:54",
         "model": "V4 Pro",
         "log": [
           "[15:18:50] 开始执行",
-          "[15:18:52] 执行完成"
+          "[15:18:52] 执行完成",
+          "[21:39:52] 开始执行",
+          "[21:39:54] 执行完成"
         ]
       },
       "blackbox": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:52",
-        "finished_at": "15:18:54",
+        "started_at": "21:39:53",
+        "finished_at": "21:39:56",
         "model": "V4 Flash",
         "log": [
           "[15:18:52] 开始执行",
-          "[15:18:54] 执行完成"
+          "[15:18:54] 执行完成",
+          "[21:39:53] 开始执行",
+          "[21:39:56] 执行完成"
         ]
       },
       "review": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:53",
-        "finished_at": "15:18:55",
+        "started_at": "21:39:55",
+        "finished_at": "21:39:57",
         "model": "V4 Pro",
         "log": [
           "[15:18:53] 开始执行",
-          "[15:18:55] 执行完成"
+          "[15:18:55] 执行完成",
+          "[21:39:55] 开始执行",
+          "[21:39:57] 执行完成"
         ]
       },
       "render-dev": {
         "status": "done",
         "progress": 100,
-        "started_at": "15:18:55",
-        "finished_at": "15:18:57",
+        "started_at": "21:39:57",
+        "finished_at": "21:39:59",
         "model": "脚本",
         "log": [
           "[15:18:55] 开始执行",
-          "[15:18:57] 执行完成"
+          "[15:18:57] 执行完成",
+          "[21:39:57] 开始执行",
+          "[21:39:59] 执行完成"
         ]
+      }
+    }
+  },
+  "universal-search": {
+    "status": "idle",
+    "phases": {
+      "phase-1": { "status": "pending" },
+      "phase-2": { "status": "pending" },
+      "phase-3": { "status": "pending" },
+      "phase-4": { "status": "pending" },
+      "phase-5": { "status": "pending" },
+      "phase-6": { "status": "pending" }
+    },
+    "agents": {
+      "search": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-1": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-2": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-3": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-4": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-5": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-6": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-7": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-8": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-9": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "scorer-10": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "judgment": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Pro", "log": []
+      },
+      "doc-writer": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Flash", "log": []
+      },
+      "summary": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "V4 Pro", "log": []
+      },
+      "render-search": {
+        "status": "pending", "progress": 0, "started_at": null, "finished_at": null,
+        "model": "脚本", "log": []
       }
     }
   },

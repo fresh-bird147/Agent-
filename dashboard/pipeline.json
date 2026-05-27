@@ -208,6 +208,174 @@
           ]
         }
       ]
+    },
+    "universal-search": {
+      "name": "万能搜索引擎",
+      "description": "关键词搜索 → 并行分拣打分 → 综合筛选 → 文档整理 → 总结摘要",
+      "phases": [
+        {
+          "id": "phase-1",
+          "name": "阶段 1：信息搜索（串行）",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "search",
+              "name": "Search Agent",
+              "label": "信息搜索",
+              "description": "提取特征关键词 → 多源搜索 → 收集原始结果",
+              "model": "V4 Flash",
+              "output": "1-search-results.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-2",
+          "name": "阶段 2：并行分拣打分（并行）",
+          "parallel": true,
+          "agents": [
+            {
+              "id": "scorer-1",
+              "name": "Scorer Agent 1",
+              "label": "分拣1组",
+              "description": "接收第1-2条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-1.json"
+            },
+            {
+              "id": "scorer-2",
+              "name": "Scorer Agent 2",
+              "label": "分拣2组",
+              "description": "接收第3-4条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-2.json"
+            },
+            {
+              "id": "scorer-3",
+              "name": "Scorer Agent 3",
+              "label": "分拣3组",
+              "description": "接收第5-6条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-3.json"
+            },
+            {
+              "id": "scorer-4",
+              "name": "Scorer Agent 4",
+              "label": "分拣4组",
+              "description": "接收第7-8条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-4.json"
+            },
+            {
+              "id": "scorer-5",
+              "name": "Scorer Agent 5",
+              "label": "分拣5组",
+              "description": "接收第9-10条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-5.json"
+            },
+            {
+              "id": "scorer-6",
+              "name": "Scorer Agent 6",
+              "label": "分拣6组",
+              "description": "接收第11-12条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-6.json"
+            },
+            {
+              "id": "scorer-7",
+              "name": "Scorer Agent 7",
+              "label": "分拣7组",
+              "description": "接收第13-14条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-7.json"
+            },
+            {
+              "id": "scorer-8",
+              "name": "Scorer Agent 8",
+              "label": "分拣8组",
+              "description": "接收第15-16条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-8.json"
+            },
+            {
+              "id": "scorer-9",
+              "name": "Scorer Agent 9",
+              "label": "分拣9组",
+              "description": "接收第17-18条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-9.json"
+            },
+            {
+              "id": "scorer-10",
+              "name": "Scorer Agent 10",
+              "label": "分拣10组",
+              "description": "接收第19-20条结果 → 4维打分 → 有权丢弃无关信息",
+              "model": "V4 Flash",
+              "output": "2-scorer-10.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-3",
+          "name": "阶段 3：综合判断排序（串行）",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "judgment",
+              "name": "Judgment Agent",
+              "label": "价值综合判断",
+              "description": "收集10个Scorer输出 → 去重合并 → 一致性检查 → 全局排序",
+              "model": "V4 Pro",
+              "output": "3-filtered-results.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-4",
+          "name": "阶段 4：文档整理（串行）",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "doc-writer",
+              "name": "Documentation Agent",
+              "label": "文档整理",
+              "description": "权重排序 → 结构化 Markdown → 关键词+源地址+权重说明",
+              "model": "V4 Flash",
+              "output": "4-research-doc.md"
+            }
+          ]
+        },
+        {
+          "id": "phase-5",
+          "name": "阶段 5：总结摘要（串行）",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "summary",
+              "name": "Summary Agent",
+              "label": "总结摘要",
+              "description": "核心发现提取 → ≤500字执行摘要 → 趋势+建议",
+              "model": "V4 Pro",
+              "output": "5-summary.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-6",
+          "name": "阶段 6：渲染报告",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "render-search",
+              "name": "render_search_report.py",
+              "label": "报告渲染",
+              "description": "JSON + MD → 最终研究报告",
+              "model": "脚本",
+              "output": "FINAL.md"
+            }
+          ]
+        }
+      ]
     }
   }
 }
