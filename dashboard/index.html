@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Pipeline Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/element-plus"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1419; color: #e7e9ea; min-height: 100vh; }
+.header { background: #1a1f2e; border-bottom: 1px solid #2d3748; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 20px; font-weight: 600; background: linear-gradient(135deg, #63b3ed, #b794f4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header-actions { display: flex; gap: 8px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 16px; }
+.stat-card .label { font-size: 12px; color: #8899a6; margin-bottom: 4px; }
+.stat-card .value { font-size: 24px; font-weight: 700; }
+.stat-card .value.running { color: #f6ad55; }
+.stat-card .value.done { color: #68d391; }
+.stat-card .value.idle { color: #8899a6; }
+.tab-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.tab-btn { padding: 8px 20px; border: 1px solid #2d3748; border-radius: 6px; background: #1a1f2e; color: #8899a6; cursor: pointer; font-size: 14px; transition: all .2s; }
+.tab-btn:hover { border-color: #4299e1; color: #e7e9ea; }
+.tab-btn.active { background: #2d3748; border-color: #4299e1; color: #63b3ed; }
+.phase-section { margin-bottom: 24px; }
+.phase-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 8px 12px; background: #1a1f2e; border-radius: 6px; border-left: 3px solid; }
+.phase-header.pending { border-color: #4a5568; }
+.phase-header.running { border-color: #f6ad55; }
+.phase-header.done { border-color: #68d391; }
+.phase-header h3 { font-size: 15px; font-weight: 500; }
+.phase-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.phase-badge.parallel { background: #2d3748; color: #63b3ed; }
+.phase-badge.serial { background: #2d3748; color: #b794f4; }
+.agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.agent-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+.agent-card:hover { border-color: #4299e1; transform: translateY(-1px); }
+.agent-card.selected { border-color: #63b3ed; box-shadow: 0 0 12px rgba(99,179,237,.15); }
+.agent-card.running { border-color: #f6ad55; border-left: 3px solid #f6ad55; }
+.agent-card.running::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f6ad55, transparent); animation: shimmer 1.5s infinite; }
+.agent-card.done { border-color: #68d391; }
+.agent-card.done::after { content: '\2713'; position: absolute; top: 8px; right: 12px; color: #68d391; font-size: 14px; }
+.agent-card.failed { border-color: #fc8181; }
+.agent-card.failed::after { content: '\2717'; position: absolute; top: 8px; right: 12px; color: #fc8181; font-size: 14px; }
+.agent-card .name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.agent-card .label { font-size: 12px; color: #8899a6; margin-bottom: 8px; }
+.agent-card .desc { font-size: 12px; color: #4a5568; margin-bottom: 10px; line-height: 1.4; }
+.agent-card .meta { display: flex; justify-content: space-between; font-size: 11px; color: #4a5568; margin-bottom: 8px; }
+.progress-bar { height: 4px; background: #2d3748; border-radius: 2px; overflow: hidden; }
+.progress-bar .fill { height: 100%; border-radius: 2px; transition: width .3s; }
+.progress-bar .fill.running { background: linear-gradient(90deg, #f6ad55, #ed8936); animation: pulse 1.5s infinite; }
+.progress-bar .fill.done { background: #68d391; }
+.progress-bar .fill.failed { background: #fc8181; }
+.detail-panel { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 8px; padding: 20px; margin-top: 20px; }
+.detail-panel h3 { font-size: 16px; margin-bottom: 12px; color: #63b3ed; }
+.log-viewer { background: #0d1117; border: 1px solid #2d3748; border-radius: 6px; padding: 12px; max-height: 200px; overflow-y: auto; font-family: 'Cascadia Code', monospace; font-size: 12px; }
+.log-viewer .log-line { padding: 2px 0; color: #8899a6; }
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .6; } }
+.empty-state { text-align: center; padding: 60px 20px; color: #4a5568; }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <h1>Agent Pipeline Dashboard</h1>
+    <div class="header-actions">
+      <el-button size="small" :type="simulating ? 'warning' : 'primary'" @click="toggleSimulate" :loading="simulating">
+        {{ simulating ? '模拟中...' : '模拟运行' }}
+      </el-button>
+      <el-button size="small" @click="resetState">重置</el-button>
+      <el-select v-model="selectedWorkflow" size="small" style="width:180px;" placeholder="选择工作流" @change="onWorkflowChange">
+        <el-option label="仓库技术尽调" value="repo-due-diligence"></el-option>
+        <el-option label="全栈开发流水线" value="dev-workflow"></el-option>
+      </el-select>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="label">当前工作流</div>
+        <div class="value" style="font-size:16px;">{{ pipeline?.name || '未选择' }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">总 Agents</div>
+        <div class="value">{{ totalAgents }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">已完成</div>
+        <div class="value done">{{ doneAgents }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">运行中</div>
+        <div class="value running">{{ runningAgents }}</div>
+      </div>
+    </div>
+
+    <!-- Pipeline visualization -->
+    <div v-if="pipeline">
+      <div v-for="phase in pipeline.phases" :key="phase.id" class="phase-section">
+        <div class="phase-header" :class="phaseStatus(phase.id)">
+          <h3>{{ phase.name }}</h3>
+          <span v-if="phase.parallel" class="phase-badge parallel">并行</span>
+          <span v-else class="phase-badge serial">串行</span>
+        </div>
+        <div class="agents-grid">
+          <div v-for="agent in phase.agents" :key="agent.id"
+               class="agent-card"
+               :class="[agentState(agent.id).status, { selected: selectedAgent?.id === agent.id }]"
+               @click="selectAgent(agent)">
+            <div class="name">{{ agent.name }}</div>
+            <div class="label">{{ agent.label }}</div>
+            <div class="desc">{{ agent.description }}</div>
+            <div class="meta">
+              <span v-if="agent.children">子任务: {{ agt(agent.id).children_done || 0 }}/{{ agent.children }}</span>
+              <span>{{ agent.model }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="fill" :class="agentState(agent.id).status"
+                   :style="{ width: agentState(agent.id).progress + '%' }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <div class="detail-panel" v-if="selectedAgent">
+        <h3>{{ selectedAgent.name }} — {{ selectedAgent.label }}</h3>
+        <el-descriptions :column="3" size="small" border style="margin-bottom:12px;">
+          <el-descriptions-item label="状态">
+            <el-tag :type="tagType(agt(selectedAgent.id).status)" size="small">
+              {{ statusText(agt(selectedAgent.id).status) }}
+            </el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="模型">{{ selectedAgent.model }}</el-descriptions-item>
+          <el-descriptions-item label="进度">{{ agt(selectedAgent.id).progress }}%</el-descriptions-item>
+          <el-descriptions-item label="开始">{{ agt(selectedAgent.id).started_at || '-' }}</el-descriptions-item>
+          <el-descriptions-item label="完成">{{ agt(selectedAgent.id).finished_at || '-' }}</el-descriptions-item>
+          <el-descriptions-item label="产出">{{ selectedAgent.output }}</el-descriptions-item>
+        </el-descriptions>
+        <div class="log-viewer" v-if="agt(selectedAgent.id).log?.length">
+          <div v-for="(line, i) in agt(selectedAgent.id).log" :key="i" class="log-line">{{ line }}</div>
+        </div>
+        <div v-else style="color:#4a5568; font-size:13px; padding:8px;">暂无日志</div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" v-else>
+      <div class="icon">&#9881;</div>
+      <p>请选择一个工作流开始监控</p>
+      <p style="font-size:12px;color:#4a5568;margin-top:8px;">点击"模拟运行"查看完整流水线</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const { createApp, ref, computed, onMounted, onUnmounted, watch } = Vue;
+
+createApp({
+  data() {
+    return {
+      selectedWorkflow: '',
+      pipeline: null,
+      state: null,
+      selectedAgent: null,
+      simulating: false,
+      eventSource: null,
+      polling: null
+    }
+  },
+  computed: {
+    totalAgents() {
+      if (!this.pipeline) return 0;
+      let count = 0;
+      this.pipeline.phases.forEach(p => count += p.agents.length);
+      return count;
+    },
+    doneAgents() {
+      if (!this.state || !this.selectedWorkflow) return 0;
+      const agents = this.state[this.selectedWorkflow]?.agents || {};
+      return Object.values(agents).filter(a => a.status === 'done').length;
+    },
+    runningAgents() {
+      if (!this.state || !this.selectedWorkflow) return 0;
+      const agents = this.state[this.selectedWorkflow]?.agents || {};
+      return Object.values(agents).filter(a => a.status === 'running').length;
+    }
+  },
+  methods: {
+    agt(id) {
+      return this.state?.[this.selectedWorkflow]?.agents?.[id] || { status: 'pending', progress: 0, log: [] };
+    },
+    agentState(id) {
+      return this.agt(id);
+    },
+    phaseStatus(phaseId) {
+      return this.state?.[this.selectedWorkflow]?.phases?.[phaseId]?.status || 'pending';
+    },
+    tagType(status) {
+      const map = { running: 'warning', done: 'success', failed: 'danger', pending: 'info' };
+      return map[status] || 'info';
+    },
+    statusText(status) {
+      const map = { running: '运行中', done: '已完成', failed: '失败', pending: '等待中' };
+      return map[status] || status;
+    },
+    selectAgent(agent) {
+      this.selectedAgent = this.selectedAgent?.id === agent.id ? null : agent;
+    },
+    async fetchPipeline() {
+      try {
+        const r = await fetch('/api/pipeline');
+        this.pipeline = (await r.json()).workflows[this.selectedWorkflow] || null;
+      } catch (e) { console.error(e); }
+    },
+    async fetchState() {
+      try {
+        const r = await fetch('/api/state');
+        this.state = await r.json();
+      } catch (e) { console.error(e); }
+    },
+    async onWorkflowChange() {
+      await this.fetchPipeline();
+      await this.fetchState();
+      this.selectedAgent = null;
+    },
+    async toggleSimulate() {
+      if (this.simulating) return;
+      this.simulating = true;
+      await fetch('/api/simulate', { method: 'POST' });
+      this.simulating = false;
+    },
+    async resetState() {
+      await fetch('/api/reset');
+      await this.fetchState();
+      this.selectedAgent = null;
+    },
+    connectSSE() {
+      this.eventSource = new EventSource('/api/events');
+      this.eventSource.onmessage = (e) => {
+        const msg = JSON.parse(e.data);
+        if (msg.type === 'state_update' || msg.type === 'simulation_complete') {
+          this.state = msg.data;
+          if (msg.type === 'simulation_complete') this.simulating = false;
+        }
+        if (msg.type === 'workflow_started') {
+          this.state = msg.data;
+          this.simulating = true;
+        }
+        if (msg.type === 'reset') {
+          this.state = msg.data;
+          this.selectedAgent = null;
+        }
+      };
+      this.eventSource.onerror = () => {
+        console.log('SSE 断连，5秒后重试...');
+        setTimeout(() => this.connectSSE(), 5000);
+      };
+    }
+  },
+  async mounted() {
+    await this.fetchState();
+    this.connectSSE();
+    this.polling = setInterval(() => this.fetchState(), 3000);
+  },
+  beforeUnmount() {
+    if (this.eventSource) this.eventSource.close();
+    if (this.polling) clearInterval(this.polling);
+  }
+}).use(ElementPlus).mount('#app');
+</script>
+</body>
+</html>

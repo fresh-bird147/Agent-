@@ -1,0 +1,233 @@
+{
+  "active_workflow": "dev-workflow",
+  "started_at": "2026-05-27 15:18:41",
+  "repo-due-diligence": {
+    "status": "done",
+    "phases": {
+      "phase-1": {
+        "status": "done"
+      },
+      "phase-2": {
+        "status": "done"
+      },
+      "phase-3": {
+        "status": "done"
+      }
+    },
+    "agents": {
+      "recon": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:31",
+        "finished_at": "15:18:32",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:31] 开始执行",
+          "[15:18:32] 执行完成"
+        ]
+      },
+      "code-review": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:31",
+        "finished_at": "15:18:34",
+        "model": "V4 Pro + 10 Flash",
+        "log": [
+          "[15:18:31] 开始执行",
+          "[15:18:34] 执行完成"
+        ],
+        "children_total": 10,
+        "children_done": 10
+      },
+      "health-metrics": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:33",
+        "finished_at": "15:18:35",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:33] 开始执行",
+          "[15:18:35] 执行完成"
+        ]
+      },
+      "usage-guide": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:35",
+        "finished_at": "15:18:38",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:35] 开始执行",
+          "[15:18:38] 执行完成"
+        ]
+      },
+      "risk-analyst": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:37",
+        "finished_at": "15:18:39",
+        "model": "V4 Pro",
+        "log": [
+          "[15:18:37] 开始执行",
+          "[15:18:39] 执行完成"
+        ]
+      },
+      "render": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:39",
+        "finished_at": "15:18:41",
+        "model": "脚本",
+        "log": [
+          "[15:18:39] 开始执行",
+          "[15:18:41] 执行完成"
+        ]
+      }
+    }
+  },
+  "dev-workflow": {
+    "status": "done",
+    "phases": {
+      "phase-1": {
+        "status": "done"
+      },
+      "phase-2": {
+        "status": "done"
+      },
+      "phase-3": {
+        "status": "done"
+      },
+      "phase-4": {
+        "status": "done"
+      },
+      "phase-5": {
+        "status": "done"
+      },
+      "phase-6": {
+        "status": "done"
+      }
+    },
+    "agents": {
+      "requirement": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:41",
+        "finished_at": "15:18:43",
+        "model": "V4 Pro",
+        "log": [
+          "[15:18:41] 开始执行",
+          "[15:18:43] 执行完成"
+        ]
+      },
+      "architecture": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:43",
+        "finished_at": "15:18:45",
+        "model": "V4 Pro",
+        "log": [
+          "[15:18:43] 开始执行",
+          "[15:18:45] 执行完成"
+        ]
+      },
+      "coding-auth": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:44",
+        "finished_at": "15:18:46",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:44] 开始执行",
+          "[15:18:46] 执行完成"
+        ],
+        "children_total": 3,
+        "children_done": 3
+      },
+      "coding-user": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:46",
+        "finished_at": "15:18:48",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:46] 开始执行",
+          "[15:18:48] 执行完成"
+        ],
+        "children_total": 2,
+        "children_done": 2
+      },
+      "coding-role": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:48",
+        "finished_at": "15:18:49",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:48] 开始执行",
+          "[15:18:49] 执行完成"
+        ],
+        "children_total": 3,
+        "children_done": 3
+      },
+      "coding-log": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:49",
+        "finished_at": "15:18:51",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:49] 开始执行",
+          "[15:18:51] 执行完成"
+        ],
+        "children_total": 2,
+        "children_done": 2
+      },
+      "whitebox": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:50",
+        "finished_at": "15:18:52",
+        "model": "V4 Pro",
+        "log": [
+          "[15:18:50] 开始执行",
+          "[15:18:52] 执行完成"
+        ]
+      },
+      "blackbox": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:52",
+        "finished_at": "15:18:54",
+        "model": "V4 Flash",
+        "log": [
+          "[15:18:52] 开始执行",
+          "[15:18:54] 执行完成"
+        ]
+      },
+      "review": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:53",
+        "finished_at": "15:18:55",
+        "model": "V4 Pro",
+        "log": [
+          "[15:18:53] 开始执行",
+          "[15:18:55] 执行完成"
+        ]
+      },
+      "render-dev": {
+        "status": "done",
+        "progress": 100,
+        "started_at": "15:18:55",
+        "finished_at": "15:18:57",
+        "model": "脚本",
+        "log": [
+          "[15:18:55] 开始执行",
+          "[15:18:57] 执行完成"
+        ]
+      }
+    }
+  },
+  "overall_progress": 0,
+  "events": []
+}

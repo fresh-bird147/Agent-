@@ -1,0 +1,213 @@
+{
+  "workflows": {
+    "repo-due-diligence": {
+      "name": "仓库技术尽调",
+      "description": "对 GitHub 仓库执行全方位技术评估",
+      "phases": [
+        {
+          "id": "phase-1",
+          "name": "阶段 1：信息采集（并行）",
+          "parallel": true,
+          "agents": [
+            {
+              "id": "recon",
+              "name": "Recon Agent",
+              "label": "项目侦查",
+              "description": "读 README、Issues → 项目意图与现状摘要",
+              "model": "V4 Flash",
+              "output": "recon.json"
+            },
+            {
+              "id": "code-review",
+              "name": "Code Review Agent",
+              "label": "代码审查",
+              "description": "挑 10 个核心文件 + RLM Batch 并行 review → 5维打分",
+              "model": "V4 Pro + Flash children",
+              "output": "code_review.json",
+              "children": 10
+            },
+            {
+              "id": "health-metrics",
+              "name": "Health Metrics Agent",
+              "label": "社区健康度",
+              "description": "API 元数据 → commit/PR/issue 活跃度趋势",
+              "model": "V4 Flash",
+              "output": "health.json"
+            },
+            {
+              "id": "usage-guide",
+              "name": "Usage Guide Agent",
+              "label": "使用指南",
+              "description": "从文档提取安装步骤、常用命令和配置",
+              "model": "V4 Flash",
+              "output": "usage.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-2",
+          "name": "阶段 2：综合判断（串行）",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "risk-analyst",
+              "name": "Risk Analyst Agent",
+              "label": "风险评估",
+              "description": "综合上游输出 → 5类风险评估 + 推荐结论",
+              "model": "V4 Pro",
+              "output": "risk.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-3",
+          "name": "阶段 3：渲染报告",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "render",
+              "name": "render_report.py",
+              "label": "报告渲染",
+              "description": "JSON → Markdown 最终报告",
+              "model": "脚本",
+              "output": "report.md"
+            }
+          ]
+        }
+      ]
+    },
+    "dev-workflow": {
+      "name": "全栈开发流水线",
+      "description": "需求文档 → Java+Vue 全栈项目交付（6 Agent + 6 阶段）",
+      "tech_stack": "Java 8 + SpringBoot 2.7 + MyBatis-Plus + Vue3",
+      "phases": [
+        {
+          "id": "phase-1",
+          "name": "阶段 1：需求拆解",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "requirement",
+              "name": "Requirement Agent",
+              "label": "需求分析",
+              "description": "阅读需求书 → 拆解为功能点 + 依赖图",
+              "model": "V4 Pro",
+              "output": "1-requirements.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-2",
+          "name": "阶段 2：架构设计",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "architecture",
+              "name": "Architecture Agent",
+              "label": "架构设计",
+              "description": "功能点 → 技术选型 + 模块划分 + API + DB",
+              "model": "V4 Pro",
+              "output": "2-architecture.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-3",
+          "name": "阶段 3：代码生成（并行）",
+          "parallel": true,
+          "agents": [
+            {
+              "id": "coding-auth",
+              "name": "Coding Agent M001",
+              "label": "用户认证模块",
+              "description": "注册/登录/JWT → AuthController + Service + Mapper",
+              "model": "V4 Flash",
+              "output": "auth.java",
+              "children": 3
+            },
+            {
+              "id": "coding-user",
+              "name": "Coding Agent M002",
+              "label": "用户信息模块",
+              "description": "信息查看/修改 → UserController + Service",
+              "model": "V4 Flash",
+              "output": "user.java",
+              "children": 2
+            },
+            {
+              "id": "coding-role",
+              "name": "Coding Agent M003",
+              "label": "权限管理模块",
+              "description": "RBAC → RoleController + Menu + RoleService",
+              "model": "V4 Flash",
+              "output": "role.java",
+              "children": 3
+            },
+            {
+              "id": "coding-log",
+              "name": "Coding Agent M004",
+              "label": "审计日志模块",
+              "description": "AOP 日志记录 → LogController + AuditLog",
+              "model": "V4 Flash",
+              "output": "log.java",
+              "children": 2
+            }
+          ]
+        },
+        {
+          "id": "phase-4",
+          "name": "阶段 4：测试（并行）",
+          "parallel": true,
+          "agents": [
+            {
+              "id": "whitebox",
+              "name": "White-Box Test Agent",
+              "label": "白盒测试",
+              "description": "静态分析 + 逻辑审查 + 安全扫描 → 代码质量评级",
+              "model": "V4 Pro",
+              "output": "4-whitebox.json"
+            },
+            {
+              "id": "blackbox",
+              "name": "Black-Box Test Agent",
+              "label": "黑盒测试",
+              "description": "功能测试 + 安全测试 + 集成场景 → 15+ 用例",
+              "model": "V4 Flash",
+              "output": "4-blackbox.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-5",
+          "name": "阶段 5：项目评分",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "review",
+              "name": "Review Agent",
+              "label": "项目评分",
+              "description": "综合全流程 → 6维打分 + 改进路线图",
+              "model": "V4 Pro",
+              "output": "5-review.json"
+            }
+          ]
+        },
+        {
+          "id": "phase-6",
+          "name": "阶段 6：渲染报告",
+          "parallel": false,
+          "agents": [
+            {
+              "id": "render-dev",
+              "name": "render_dev_report.py",
+              "label": "报告渲染",
+              "description": "JSON → Markdown 最终交付报告",
+              "model": "脚本",
+              "output": "FINAL.md"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
